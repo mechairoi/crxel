@@ -30,6 +30,15 @@
 (function() {
      const url = "ws://localhost:9649/";
      var ws;
+     function JSON_stringify(s, emit_unicode)
+     {
+         var json = JSON.stringify(s);
+         return emit_unicode ? json : json.replace(/[\u007f-\uffff]/g,
+             function(c) {
+                 return '\\u'+('0000'+c.charCodeAt(0).toString(16)).slice(-4);
+             }
+         );
+     }
 
      ws = new WebSocket(url);
 
@@ -38,7 +47,7 @@
 
          var send = function(r){
              ws.send(
-                 JSON.stringify( {
+                 JSON_stringify( {
                      "op": "result",
                      "id": m.id,
                      "values": [String(r)]
