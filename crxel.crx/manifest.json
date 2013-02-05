@@ -1,0 +1,72 @@
+{
+  "name": "crxel",
+  "version": "1.0",
+  "manifest_version": 2,
+
+  "description": "An interface",
+  "icons": {
+      "16" : "16x16.png",
+      "48" : "48x48.png",
+      "128": "128x128.png"
+  },
+  // "default_locale": "en",
+
+  "browser_action": {
+      "default_icon" : "19x19.png",
+      "default_title": "open"
+  },
+
+  // Add any of these that you need
+  "background": {"persistent": true, "scripts": ["stacktrace.js", "background.js"] },
+  // "chrome_url_overrides": {...},
+  // "content_scripts": [
+  //     {
+  //         "matches": ["<all_urls>"],
+  //         "js": ["content.js"]
+  //     }
+  // ],
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  // "file_browser_handlers": [...],
+  // "homepage_url": "http://path/to/homepage",
+  // "incognito": "spanning" or "split",
+  // "intents": {...}
+  // "key": "publicKey",
+  //"minimum_chrome_version": "versionString",
+
+  "offline_enabled": true,
+  // "options_page": "aFile.html",
+  "permissions": [
+      "<all_urls>",
+      "activeTab",
+      "background",
+      "bookmarks",
+      "chrome://favicon/",
+      "clipboardRead",
+      // "clipboardWrite",
+      "contentSettings",
+      "contextMenus",
+      "cookies",
+      // "experimental",
+      "fileBrowserHandler",
+      "geolocation",
+      "history",
+      "idle",
+      "management",
+      "notifications",
+      "privacy",
+      "proxy",
+      "storage",
+      "tabs",
+      "topSites",
+      "tts",
+      "ttsEngine",
+      "unlimitedStorage",
+      "webNavigation",
+      "webRequest",
+      "webRequestBlocking"
+  ]
+  // "plugins": [...],
+  // "update_url": "http://path/to/updateInfo.xml",
+  // "web_accessible_resources": [...],
+  // "sandbox": [...]
+}
