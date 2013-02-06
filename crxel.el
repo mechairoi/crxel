@@ -25,12 +25,14 @@
 (defun crxel/stop ()
   (interactive)
   (let ((conn crxel/connection))
+    (when crxel/websocket (websocket-close crxel/websocket))
     (setq crxel/callback-table nil
           crxel/connection nil
           crxel/websocket nil)
     (websocket-server-close conn)))
 
 (defun crxel/on-open (ws)
+  (when crxel/websocket (websocket-close crxel/websocket))
   (setq crxel/websocket ws))
 
 (defun crxel/on-message (ws frame)

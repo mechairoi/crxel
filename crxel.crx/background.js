@@ -28,9 +28,6 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 (function() {
-     const url = "ws://localhost:9649/";
-     window.crxel = {};
-     var ws;
      function JSON_stringify(s, emit_unicode)
      {
          var json = JSON.stringify(s);
@@ -41,48 +38,61 @@
          );
      }
 
-     ws = new WebSocket(url);
-     window.crxel.ws={};
+     window.crxel = {};
+     function connect(){
+         const url = "ws://localhost:9649/";
+         var ws;
+         ws = new WebSocket(url);
+         if (!ws) return false;
+         window.crxel.ws = ws;
 
-     ws.onmessage = function(event){
-         var m = JSON.parse(event.data);
+         ws.onmessage = function(event){
+             var m = JSON.parse(event.data);
 
-         var callback = function(r){
-             ws.send(
-                 JSON_stringify( {
-                     "op": "result",
-                     "id": m.id,
-                     "values": [String(r)]
-                 })
-             );
+             var callback = function(r){
+                 ws.send(
+                     JSON_stringify( {
+                         "op": "result",
+                         "id": m.id,
+                         "values": [String(r)]
+                     })
+                 );
+             };
+
+             try {
+                 window.crxel.callback = callback;
+                 var r = window.eval(m.code);
+             } catch (e) {
+                 var message = String(e);
+                 if (message == "[object Error]") {
+                     try {
+                         message = "ERROR: " + e.message;
+                     } catch(e1) {}
+                 }
+                 ws.send(
+                     JSON.stringify( {
+                         "op": "result",
+                         "id": m.id,
+                         "error": message + "\n" + swank_printStackTrace({ e: e }).join("\n")
+                     } )
+                 );
+                 return;
+             }
+             if (m.op === "eval")
+                 callback(r);
          };
 
-         try {
-             window.crxel.callback = callback;
-             var r = window.eval(m.code);
-         } catch (e) {
-             var message = String(e);
-             if (message == "[object Error]") {
-                 try {
-                     message = "ERROR: " + e.message;
-                 } catch(e1) {}
-             }
-             ws.send(
-                 JSON.stringify( {
-                     "op": "result",
-                     "id": m.id,
-                     "error": message + "\n" + swank_printStackTrace({ e: e }).join("\n")
-                 } )
-            );
-            return;
-        }
-         if (m.op === "eval")
-             callback(String(r));
-     };
+         ws.onclose = function(event){
+             setTimeout(connect, 2000);
+         };
 
-     window.onunload = function(){
-         var code = 4500;
-         ws.close(4500 , "client closed");
-     };
+         window.onunload = function(){
+             ws.onclose = undefined;
+             var code = 4500;
+             ws.close(4500 , "client closed");
+         };
+         return true;
+     }
+     connect();
 })();
 
