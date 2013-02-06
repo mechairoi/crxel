@@ -57,7 +57,7 @@
                        (values (cdr-safe (assq 'values data))))
                    (if err
                        (when fail (funcall fail err))
-                     (when success (funcall success values))))))
+                     (when success (funcall success (elt values 0)))))))
     (apply 'crxel/request
            `(:code ,code :op ,(if (plist-get plist :async) "eval-async" "eval"))
            plist)))
@@ -112,12 +112,12 @@
 
 ;; (crxel/start 9649)
 ;; (crxel/eval "1+1" :success 'print :fail 'error)
-;; (crxel/eval "var crxel = window.crxel;
+;; (crxel/eval "var callback = window.crxel.callback;
 ;;              chrome.tabs.query({}, function(tabs) {
-;;                  crxel(JSON.stringify(tabs));
+;;                  callback(JSON.stringify(tabs));
 ;;              });"
 ;;             :async t
 ;;             :success (lambda (data)
-;;                        (print (json-read-from-string (elt data 0))))
+;;                        (print (json-read-from-string data)))
 ;;             :fail 'error)
 ;; (crxel/stop)

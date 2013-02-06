@@ -29,6 +29,7 @@
 
 (function() {
      const url = "ws://localhost:9649/";
+     window.crxel = {};
      var ws;
      function JSON_stringify(s, emit_unicode)
      {
@@ -41,11 +42,12 @@
      }
 
      ws = new WebSocket(url);
+     window.crxel.ws={};
 
      ws.onmessage = function(event){
          var m = JSON.parse(event.data);
 
-         var send = function(r){
+         var callback = function(r){
              ws.send(
                  JSON_stringify( {
                      "op": "result",
@@ -56,7 +58,7 @@
          };
 
          try {
-             window.crxel = send;
+             window.crxel.callback = callback;
              var r = window.eval(m.code);
          } catch (e) {
              var message = String(e);
@@ -75,7 +77,7 @@
             return;
         }
          if (m.op === "eval")
-             send(r);
+             callback(String(r));
      };
 
      window.onunload = function(){
