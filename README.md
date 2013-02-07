@@ -30,3 +30,6 @@ Install chrome extension to /path/to/crxel/crxel.crx
             :success (lambda (data)
                        (print (json-read-from-string data)))
             :fail 'error)
+
+## Example
+* https://gist.github.com/mechairoi/4730136
