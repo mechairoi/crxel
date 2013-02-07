@@ -4,15 +4,17 @@
 ## Install
 
 ### Clone repository
+```el
 git clone https://github.com/ahyatt/emacs-websocket
 git clone https://github.com/mechairoi/crxel
+```
 
 ### Install Chrome Extention
 Install chrome extension to /path/to/crxel/crxel.crx
 
 ### Configure Emacs
 ~/.emacs.d/
-```elisp
+```el
 (add-to-list 'load-path "/path/to/emacs-websocket")
 (add-to-list 'load-path "/path/to/crxel")
 (require 'crxel)
@@ -20,7 +22,7 @@ Install chrome extension to /path/to/crxel/crxel.crx
 ```
 
 ### Run
-```elisp
+```el
 (crxel/eval "1+1" :success 'print :fail 'error)
 (crxel/eval "var callback = window.crxel.callback;
              chrome.tabs.query({}, function(tabs) {
@@ -30,6 +32,7 @@ Install chrome extension to /path/to/crxel/crxel.crx
             :success (lambda (data)
                        (print (json-read-from-string data)))
             :fail 'error)
+```
 
 ## Example
 * https://gist.github.com/mechairoi/4730136
