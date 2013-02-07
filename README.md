@@ -9,7 +9,7 @@ git clone https://github.com/ahyatt/emacs-websocket
 git clone https://github.com/mechairoi/crxel
 ```
 
-### Install Chrome Extention
+### Install Chrome Extension
 Install chrome extension to /path/to/crxel/crxel.crx
 
 ### Configure Emacs
