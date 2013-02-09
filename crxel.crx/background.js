@@ -27,6 +27,8 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+// forked form https://github.com/swank-js/swank-js/blob/bf85069cfe8ad87337e9844e94e8a44b3f39cb82/client/swank-js.js
+
 (function() {
      function JSON_stringify(s, emit_unicode)
      {
