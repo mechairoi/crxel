@@ -1,5 +1,8 @@
+## Commentary
+'crxel' is an interface of [Google Chrome Extensions API](http://developer.chrome.com/extensions/docs.html) for Emacs Lisp.
+
 ## Requirements
-* https://github.com/ahyatt/emacs-websocket
+* [emacs-websocket](https://github.com/ahyatt/emacs-websocket)
 
 ## How to install
 
@@ -44,7 +47,6 @@ or
                        (print (json-read-from-string data)))
             :fail 'error)
 ```
-
 
 ## Sample applications
 * [anything-chrome-tabs.el](https://gist.github.com/mechairoi/4730136)
