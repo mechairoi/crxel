@@ -19,12 +19,12 @@
   // Add any of these that you need
   "background": {"persistent": true, "scripts": ["stacktrace.js", "background.js"] },
   // "chrome_url_overrides": {...},
-  // "content_scripts": [
-  //     {
-  //         "matches": ["<all_urls>"],
-  //         "js": ["content.js"]
-  //     }
-  // ],
+  "content_scripts": [
+      {
+          "matches": ["<all_urls>"],
+          "js": ["stacktrace.js", "content.js"]
+      }
+  ],
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   // "file_browser_handlers": [...],
   // "homepage_url": "http://path/to/homepage",
