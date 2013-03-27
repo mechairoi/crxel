@@ -90,7 +90,6 @@
 
          window.onunload = function(){
              ws.onclose = undefined;
-             var code = 4500;
              ws.close(4500 , "client closed");
          };
          return true;
