@@ -50,6 +50,7 @@
 
          ws.onmessage = function(event){
              var m = JSON.parse(event.data);
+             if (!(m && m.op === "eval")) return;
 
              var callback = function(r){
                  ws.send(
@@ -80,8 +81,6 @@
                  );
                  return;
              }
-             if (m.op === "eval")
-                 callback(r);
          };
 
          ws.onclose = function(event){

@@ -60,9 +60,7 @@
                    (if err
                        (when fail (funcall fail err))
                      (when success (funcall success (elt values 0)))))))
-    (apply 'crxel/request
-           `(:code ,code :op ,(if (plist-get plist :async) "eval-async" "eval"))
-           plist)))
+    (apply 'crxel/request `(:code ,code :op "eval") plist)))
 
 (defun crxel/request (data &rest plist)
   (interactive)
@@ -113,12 +111,11 @@
       (error "no websocket"))))
 
 ;; (crxel/start 9649)
-;; (crxel/eval "1+1" :success 'print :fail 'error)
+;; (crxel/eval "window.crxel.callback(1+1)" :success 'print :fail 'error)
 ;; (crxel/eval "var callback = window.crxel.callback;
 ;;              chrome.tabs.query({}, function(tabs) {
 ;;                  callback(JSON.stringify(tabs));
 ;;              });"
-;;             :async t
 ;;             :success (lambda (data)
 ;;                        (print (json-read-from-string data)))
 ;;             :fail 'error)
