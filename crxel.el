@@ -37,7 +37,10 @@
 
 (defun crxel/on-message (ws frame)
   (when (websocket-frame-completep frame)
-    (let* ((data (json-read-from-string (websocket-frame-payload frame)))
+    (let* ((payload (websocket-frame-payload frame))
+           (data (let ((json-object-type 'alist)
+                       (json-key-type 'symbol))
+                   (json-read-from-string payload)))
            (id-string (cdr-safe (assq 'id data))))
       (when id-string
         (crxel/call-success (intern id-string) data)))))
@@ -50,6 +53,24 @@
   )
 
 (defun crxel/eval (code &rest plist)
+  (lexical-let ((success (plist-get plist :success))
+                (json-object-type (or (plist-get plist :json-object-type)
+                                      json-object-type))
+                (json-key-type (or (plist-get plist :json-key-type)
+                                   json-key-type)))
+    (plist-put plist :success
+               (lambda (data)
+                 (funcall success
+                          (let ((json-object-type json-object-type)
+                                (json-key-type json-key-type))
+                            (json-read-from-string data)))))
+    (apply 'crxel/eval-0
+     (format
+      "(function(callback){ %s })(function(r){ window.crxel.callback(JSON.stringify(r)); });"
+      code)
+     plist)))
+
+(defun crxel/eval-0 (code &rest plist)
   (lexical-let ((success (plist-get plist :success))
                 (fail (plist-get plist :fail)))
     (plist-put plist :success
@@ -111,12 +132,12 @@
       (error "no websocket"))))
 
 ;; (crxel/start 9649)
-;; (crxel/eval "window.crxel.callback(1+1)" :success 'print :fail 'error)
+;; (crxel/eval "window.crxel.callback(1+1)" :success 'print :fail 'print)
 ;; (crxel/eval "var callback = window.crxel.callback;
 ;;              chrome.tabs.query({}, function(tabs) {
 ;;                  callback(JSON.stringify(tabs));
 ;;              });"
 ;;             :success (lambda (data)
 ;;                        (print (json-read-from-string data)))
-;;             :fail 'error)
+;;             :fail 'print)
 ;; (crxel/stop)

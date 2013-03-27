@@ -29,7 +29,8 @@
 
 (function(){
      window.crxel = {};
-     chrome.runtime.onMessage.addEventListener(
+     // chrome.runtime.onMessage.addEventListener(
+     chrome.extension.onMessage.addListener(
          function(message, sender, sendResponse){
              if(!(message && message.op === "eval"))
                  return;
@@ -39,9 +40,10 @@
                      "values": [String(r)]
                  });
              };
+             console.log(message.code);
              try {
                  window.crxel.callback = callback;
-                 var r = window.eval(m.code);
+                 window.eval(message.code);
              } catch (e) {
                  var msg = String(e);
                  if (msg == "[object Error]") {

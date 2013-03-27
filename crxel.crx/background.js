@@ -64,7 +64,7 @@
 
              try {
                  window.crxel.callback = callback;
-                 var r = window.eval(m.code);
+                 window.eval(m.code);
              } catch (e) {
                  var message = String(e);
                  if (message == "[object Error]") {
@@ -79,7 +79,6 @@
                          "error": message + "\n" + swank_printStackTrace({ e: e }).join("\n")
                      } )
                  );
-                 return;
              }
          };
 
