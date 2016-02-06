@@ -3,7 +3,6 @@
 (require 'websocket)
 (require 'json)
 (eval-when-compile (require 'cl))
-;; (require 'deferred)
 
 (defvar crxel/default-timeout 10.0)
 
@@ -12,6 +11,7 @@
 (defvar crxel/callback-table nil)
 (defvar crxel/next-id 0)
 
+;;;###autoload
 (defun crxel/start (port)
   (interactive)
   (setq crxel/connection
@@ -22,6 +22,7 @@
          :on-close 'crxel/on-close
          :on-error 'crxel/on-error)))
 
+;;;###autoload
 (defun crxel/stop ()
   (interactive)
   (let ((conn crxel/connection))
@@ -52,6 +53,7 @@
 (defun crxel/on-error (&rest args)
   )
 
+;;;###autoload
 (defun crxel/eval (code &rest plist)
   (lexical-let ((success (plist-get plist :success))
                 (json-object-type (or (plist-get plist :json-object-type)
