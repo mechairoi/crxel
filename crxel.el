@@ -1,4 +1,37 @@
-(provide 'crxel)
+;;; crxel.el --- interface of chrome extension api       -*- lexical-binding: t; -*-
+
+;; Copyright (C) 2016  TSUJIKAWA TAKAYA
+
+;; Author: TSUJIKAWA TAKAYA <ttsujikawa at gmail.com>
+;; Keywords: google-chrome, websocket
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;; (crxel/start 9649)
+;; (crxel/eval "window.crxel.callback(1+1)" :success 'print :fail 'print)
+;; (crxel/eval "var callback = window.crxel.callback;
+;;              chrome.tabs.query({}, function(tabs) {
+;;                  callback(JSON.stringify(tabs));
+;;              });"
+;;             :success (lambda (data)
+;;                        (print (json-read-from-string data)))
+;;             :fail 'print)
+;; (crxel/stop)
+
+;;; Code:
 
 (require 'websocket)
 (require 'json)
@@ -53,7 +86,6 @@
 (defun crxel/on-error (&rest args)
   )
 
-;;;###autoload
 (defun crxel/eval (code &rest plist)
   (lexical-let ((success (plist-get plist :success))
                 (json-object-type (or (plist-get plist :json-object-type)
@@ -133,13 +165,6 @@
         (websocket-send-text crxel/websocket text)
       (error "no websocket"))))
 
-;; (crxel/start 9649)
-;; (crxel/eval "window.crxel.callback(1+1)" :success 'print :fail 'print)
-;; (crxel/eval "var callback = window.crxel.callback;
-;;              chrome.tabs.query({}, function(tabs) {
-;;                  callback(JSON.stringify(tabs));
-;;              });"
-;;             :success (lambda (data)
-;;                        (print (json-read-from-string data)))
-;;             :fail 'print)
-;; (crxel/stop)
+(provide 'crxel)
+
+;;; crxel.el ends here
